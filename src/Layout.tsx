@@ -1,19 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
+import CanvasView from './CanvasView'
+import ButtonsView from './ButtonsView'
 
-import { AppSidebar } from './components/AppSidebar'
-import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar"
 
-const Trigger = () => (
-    <div style={{ position: 'absolute', top: 10, zIndex: 1 }}>
-        <SidebarTrigger />
-    </div>
-)
+export default function Layout() {
+    const [color, setColor] = useState<string>('#cccccc');
 
-export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex h-screen w-full">
+
             <main className="flex-1 relative">
-                {children}
+                <ButtonsView setColor={setColor} />
+                <CanvasView color={color} />
             </main>
         </div>
     )

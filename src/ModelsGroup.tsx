@@ -13,54 +13,50 @@ export function Model() {
 
     useFrame((_state, delta) => {
         if (ref.current) {
-            ref.current.rotation.y += delta * 0.2; // 0.2 radians per second
+            ref.current.rotation.y += delta * 0.2;
         }
     });
 
-    // useEffect(() => {
-    //     if (ref.current && object) {
-    //         const size = new THREE.Vector3();
-    //         const center = new THREE.Vector3();
-    //         const box = new THREE.Box3().setFromObject(ref.current);
-
-    //         box.getSize(size);
-    //         box.getCenter(center);
-
-    //         ref.current.position.sub(center);
-
-    //         const maxAxis = Math.max(size.x, size.y, size.z);
-
-    //         ref.current.scale.multiplyScalar(5 / maxAxis);
-    //     }
-    // }, [ref, object]);
+    useEffect(() => {
+        if (object) {
+            object.traverse((child) => {
+                if ((child as THREE.Mesh).isMesh) {
+                    (child as THREE.Mesh).material = new THREE.MeshStandardMaterial({
+                        color: new THREE.Color('#cccccc'),
+                        metalness: 1.0,
+                        roughness: 0.2,
+                        envMapIntensity: 1.0
+                    });
+                }
+            });
+        }
+    }, [object]);
 
     return (
         <primitive ref={ref} object={object} />
     );
 }
 
-export function SphereModel() {
+export function SphereModel({ color }) {
     const ref = useRef<THREE.Object3D>(null);
     const object = useLoader(OBJLoader, '/models/sphere.obj');
 
-    // useEffect(() => {
-    //     if (ref.current && object) {
-    //         const size = new THREE.Vector3();
-    //         const center = new THREE.Vector3();
-    //         const box = new THREE.Box3().setFromObject(ref.current);
-
-    //         box.getSize(size);
-    //         box.getCenter(center);
-
-    //         ref.current.position.sub(center);
-
-    //         const maxAxis = Math.max(size.x, size.y, size.z);
-    //         ref.current.scale.multiplyScalar(2 / maxAxis);
-
-    //         ref.current.position.y += 0.23;
-
-    //     }
-    // }, [ref, object]);
+    if (object) {
+        object.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+                (child as THREE.Mesh).material = new THREE.MeshPhysicalMaterial({
+                    color: new THREE.Color(color),
+                    clearcoatRoughness: 0.2,
+                    transmission: 0.8,
+                    transparent: true,
+                    roughness: 0.5,
+                    metalness: 0.1,
+                    thickness: 1.5,
+                    clearcoat: 1.0,
+                });
+            }
+        });
+    }
 
     return (
         <primitive ref={ref} object={object} />

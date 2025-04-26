@@ -7,9 +7,7 @@ import CanvasView from './CanvasView'
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Layout>
-        <CanvasView />
-      </Layout>
+      <Layout />
     </ThemeProvider>
   )
 }
