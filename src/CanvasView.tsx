@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three-stdlib';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber'
+import { ModelsGroup } from './ModelsGroup';
 
 function Model() {
     const ref = useRef<THREE.Object3D>(null);
@@ -78,8 +79,7 @@ export default function CanvasView() {
                 <directionalLight position={[5, 5, 5]} intensity={1} />
                 <directionalLight position={[-5, 5, 5]} intensity={0.5} />
 
-                <Model />
-                <SphereModel />
+                <ModelsGroup />
 
                 <OrbitControls
                     minPolarAngle={Math.PI / 3}
