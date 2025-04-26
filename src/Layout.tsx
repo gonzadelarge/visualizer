@@ -11,13 +11,10 @@ const Trigger = () => (
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider defaultOpen>
-            <div className="flex h-screen w-full">
-                <AppSidebar />
-                <main className="flex-1 relative">
-                    {children}
-                </main>
-            </div>
-        </SidebarProvider>
+        <div className="flex h-screen w-full">
+            <main className="flex-1 relative">
+                {children}
+            </main>
+        </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import * as THREE from 'three';
 
@@ -17,22 +17,22 @@ export function Model() {
         }
     });
 
-    useEffect(() => {
-        if (ref.current && object) {
-            const size = new THREE.Vector3();
-            const center = new THREE.Vector3();
-            const box = new THREE.Box3().setFromObject(ref.current);
+    // useEffect(() => {
+    //     if (ref.current && object) {
+    //         const size = new THREE.Vector3();
+    //         const center = new THREE.Vector3();
+    //         const box = new THREE.Box3().setFromObject(ref.current);
 
-            box.getSize(size);
-            box.getCenter(center);
+    //         box.getSize(size);
+    //         box.getCenter(center);
 
-            ref.current.position.sub(center);
+    //         ref.current.position.sub(center);
 
-            const maxAxis = Math.max(size.x, size.y, size.z);
+    //         const maxAxis = Math.max(size.x, size.y, size.z);
 
-            ref.current.scale.multiplyScalar(5 / maxAxis);
-        }
-    }, [ref, object]);
+    //         ref.current.scale.multiplyScalar(5 / maxAxis);
+    //     }
+    // }, [ref, object]);
 
     return (
         <primitive ref={ref} object={object} />
@@ -41,28 +41,26 @@ export function Model() {
 
 export function SphereModel() {
     const ref = useRef<THREE.Object3D>(null);
-    const object = useLoader(OBJLoader, '/models/sphere.obj', (e) => {
-        console.log(e)
-    });
+    const object = useLoader(OBJLoader, '/models/sphere.obj');
 
-    useEffect(() => {
-        if (ref.current && object) {
-            const size = new THREE.Vector3();
-            const center = new THREE.Vector3();
-            const box = new THREE.Box3().setFromObject(ref.current);
+    // useEffect(() => {
+    //     if (ref.current && object) {
+    //         const size = new THREE.Vector3();
+    //         const center = new THREE.Vector3();
+    //         const box = new THREE.Box3().setFromObject(ref.current);
 
-            box.getSize(size);
-            box.getCenter(center);
+    //         box.getSize(size);
+    //         box.getCenter(center);
 
-            ref.current.position.sub(center);
+    //         ref.current.position.sub(center);
 
-            const maxAxis = Math.max(size.x, size.y, size.z);
-            ref.current.scale.multiplyScalar(2 / maxAxis);
+    //         const maxAxis = Math.max(size.x, size.y, size.z);
+    //         ref.current.scale.multiplyScalar(2 / maxAxis);
 
-            ref.current.position.y += 0.23;
+    //         ref.current.position.y += 0.23;
 
-        }
-    }, [ref, object]);
+    //     }
+    // }, [ref, object]);
 
     return (
         <primitive ref={ref} object={object} />
@@ -72,13 +70,11 @@ export function SphereModel() {
 export function ModelsGroup() {
     const groupRef = useRef<THREE.Group>(null);
 
-    const [modelsLoaded, setModelsLoaded] = useState(false);
-
     const ring = useLoader(OBJLoader, '/models/ring.obj');
     const sphere = useLoader(OBJLoader, '/models/sphere.obj');
 
     useEffect(() => {
-        if (groupRef.current && ring && sphere) {
+        if (groupRef.current) {
             const ringModel = ring.clone();
             const sphereModel = sphere.clone();
 
@@ -104,13 +100,8 @@ export function ModelsGroup() {
             groupBox.getCenter(groupCenter);
             groupRef.current.position.sub(groupCenter);
 
-            setModelsLoaded(true);
         }
     }, [ring, sphere]);
-
-    if (!modelsLoaded) {
-        return null;
-    }
 
     return <group ref={groupRef} />;
 }
