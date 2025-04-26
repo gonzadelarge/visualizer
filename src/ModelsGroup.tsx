@@ -22,29 +22,25 @@ export function ModelsGroup() {
                 box.getCenter(center);
                 box.getSize(size);
 
-                // Center the model geometry
+
                 model.position.sub(center);
 
-                // Normalize the model size
+
                 const maxAxis = Math.max(size.x, size.y, size.z);
                 const scaleFactor = 1 / maxAxis;
                 model.scale.setScalar(scaleFactor);
             });
 
-            // Place the sphere above the ring
             sphere.position.y += 1.2;
 
-            // Add models to group
             groupRef.current.add(ring);
             groupRef.current.add(sphere);
 
-            // Center the whole group again
             const groupBox = new THREE.Box3().setFromObject(groupRef.current);
             const groupCenter = new THREE.Vector3();
             groupBox.getCenter(groupCenter);
             groupRef.current.position.sub(groupCenter);
 
-            // Scale the full group if needed
             const groupSize = new THREE.Vector3();
             groupBox.getSize(groupSize);
             const groupMaxAxis = Math.max(groupSize.x, groupSize.y, groupSize.z);

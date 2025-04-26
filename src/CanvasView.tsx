@@ -72,18 +72,17 @@ export default function CanvasView() {
         <div className="w-full h-full">
             <Canvas
                 style={{ background: '#14141d' }}
-                camera={{ position: [2, 2, 2], fov: 50 }}
+            // camera={{ position: [2, 2, 2], fov: 50 }}
             >
 
                 <ambientLight intensity={0.5} />
                 <directionalLight position={[5, 5, 5]} intensity={1} />
                 <directionalLight position={[-5, 5, 5]} intensity={0.5} />
 
+                <OrbitControls />
+
                 <ModelsGroup />
 
-                <OrbitControls
-                    minPolarAngle={Math.PI / 3}
-                    maxPolarAngle={Math.PI / 3} />
             </Canvas>
         </div>
     )
