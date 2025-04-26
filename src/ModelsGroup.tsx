@@ -1,59 +1,116 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import * as THREE from 'three';
 
 import { OBJLoader } from 'three-stdlib';
-import { useLoader, useThree } from '@react-three/fiber';
-import { fitCameraToObject } from './lib/helpers';
+import { useLoader, useFrame } from '@react-three/fiber';
+
+
+export function Model() {
+    const ref = useRef<THREE.Object3D>(null);
+
+    const object = useLoader(OBJLoader, '/models/ring.obj');
+
+    useFrame((_state, delta) => {
+        if (ref.current) {
+            ref.current.rotation.y += delta * 0.2; // 0.2 radians per second
+        }
+    });
+
+    useEffect(() => {
+        if (ref.current && object) {
+            const size = new THREE.Vector3();
+            const center = new THREE.Vector3();
+            const box = new THREE.Box3().setFromObject(ref.current);
+
+            box.getSize(size);
+            box.getCenter(center);
+
+            ref.current.position.sub(center);
+
+            const maxAxis = Math.max(size.x, size.y, size.z);
+
+            ref.current.scale.multiplyScalar(5 / maxAxis);
+        }
+    }, [ref, object]);
+
+    return (
+        <primitive ref={ref} object={object} />
+    );
+}
+
+export function SphereModel() {
+    const ref = useRef<THREE.Object3D>(null);
+    const object = useLoader(OBJLoader, '/models/sphere.obj', (e) => {
+        console.log(e)
+    });
+
+    useEffect(() => {
+        if (ref.current && object) {
+            const size = new THREE.Vector3();
+            const center = new THREE.Vector3();
+            const box = new THREE.Box3().setFromObject(ref.current);
+
+            box.getSize(size);
+            box.getCenter(center);
+
+            ref.current.position.sub(center);
+
+            const maxAxis = Math.max(size.x, size.y, size.z);
+            ref.current.scale.multiplyScalar(2 / maxAxis);
+
+            ref.current.position.y += 0.23;
+
+        }
+    }, [ref, object]);
+
+    return (
+        <primitive ref={ref} object={object} />
+    );
+}
 
 export function ModelsGroup() {
     const groupRef = useRef<THREE.Group>(null);
 
-    const { camera } = useThree();
+    const [modelsLoaded, setModelsLoaded] = useState(false);
 
     const ring = useLoader(OBJLoader, '/models/ring.obj');
     const sphere = useLoader(OBJLoader, '/models/sphere.obj');
 
     useEffect(() => {
-        if (groupRef.current) {
-            const models = [ring, sphere];
+        if (groupRef.current && ring && sphere) {
+            const ringModel = ring.clone();
+            const sphereModel = sphere.clone();
 
-            models.forEach((model) => {
+            [ringModel, sphereModel].forEach((model) => {
                 const box = new THREE.Box3().setFromObject(model);
                 const center = new THREE.Vector3();
-                const size = new THREE.Vector3();
                 box.getCenter(center);
-                box.getSize(size);
-
                 model.position.sub(center);
 
-                const maxAxis = Math.max(size.x, size.y, size.z);
-                const scaleFactor = 1 / maxAxis;
-                model.scale.setScalar(scaleFactor);
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 1 / maxDim;
+                model.scale.setScalar(scale);
             });
 
-            sphere.position.y += 1.2;
-            groupRef.current.add(ring);
-            groupRef.current.add(sphere);
+            sphereModel.position.y += 1.2;
+
+            groupRef.current.add(ringModel);
+            groupRef.current.add(sphereModel);
 
             const groupBox = new THREE.Box3().setFromObject(groupRef.current);
             const groupCenter = new THREE.Vector3();
             groupBox.getCenter(groupCenter);
             groupRef.current.position.sub(groupCenter);
 
-            const groupSize = new THREE.Vector3();
-            groupBox.getSize(groupSize);
-            const groupMaxAxis = Math.max(groupSize.x, groupSize.y, groupSize.z);
-
-            if (groupMaxAxis > 1) {
-                const globalScale = 1 / groupMaxAxis;
-                groupRef.current.scale.setScalar(globalScale);
-            }
-
-            // ⭐️ Auto adjust camera!
-            fitCameraToObject(camera, groupRef.current);
+            setModelsLoaded(true);
         }
-    }, [ring, sphere, camera]);
+    }, [ring, sphere]);
+
+    if (!modelsLoaded) {
+        return null;
+    }
 
     return <group ref={groupRef} />;
 }
