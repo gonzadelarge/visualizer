@@ -13,32 +13,46 @@ export function ModelsGroup() {
 
     useEffect(() => {
         if (groupRef.current) {
-            [ring, sphere].forEach((model, idx) => {
-                const size = new THREE.Vector3();
-                const center = new THREE.Vector3();
-                const box = new THREE.Box3().setFromObject(model);
+            const models = [ring, sphere];
 
+            models.forEach((model) => {
+                const box = new THREE.Box3().setFromObject(model);
+                const center = new THREE.Vector3();
+                const size = new THREE.Vector3();
                 box.getCenter(center);
                 box.getSize(size);
 
+                // Center the model geometry
                 model.position.sub(center);
 
-                const factorScale = idx === 0 ? 1 : 0.4;
+                // Normalize the model size
                 const maxAxis = Math.max(size.x, size.y, size.z);
-
-                model.scale.multiplyScalar(factorScale / maxAxis);
+                const scaleFactor = 1 / maxAxis;
+                model.scale.setScalar(scaleFactor);
             });
 
-            sphere.position.y += 0.23;
+            // Place the sphere above the ring
+            sphere.position.y += 1.2;
 
+            // Add models to group
             groupRef.current.add(ring);
             groupRef.current.add(sphere);
 
+            // Center the whole group again
             const groupBox = new THREE.Box3().setFromObject(groupRef.current);
             const groupCenter = new THREE.Vector3();
-
             groupBox.getCenter(groupCenter);
             groupRef.current.position.sub(groupCenter);
+
+            // Scale the full group if needed
+            const groupSize = new THREE.Vector3();
+            groupBox.getSize(groupSize);
+            const groupMaxAxis = Math.max(groupSize.x, groupSize.y, groupSize.z);
+
+            if (groupMaxAxis > 1) {
+                const globalScale = 1 / groupMaxAxis;
+                groupRef.current.scale.setScalar(globalScale);
+            }
         }
     }, [ring, sphere]);
 
