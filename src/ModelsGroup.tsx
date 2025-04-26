@@ -3,10 +3,13 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { OBJLoader } from 'three-stdlib';
-import { useLoader } from '@react-three/fiber';
+import { useLoader, useThree } from '@react-three/fiber';
+import { fitCameraToObject } from './lib/helpers';
 
 export function ModelsGroup() {
     const groupRef = useRef<THREE.Group>(null);
+
+    const { camera } = useThree();
 
     const ring = useLoader(OBJLoader, '/models/ring.obj');
     const sphere = useLoader(OBJLoader, '/models/sphere.obj');
@@ -22,9 +25,7 @@ export function ModelsGroup() {
                 box.getCenter(center);
                 box.getSize(size);
 
-
                 model.position.sub(center);
-
 
                 const maxAxis = Math.max(size.x, size.y, size.z);
                 const scaleFactor = 1 / maxAxis;
@@ -32,7 +33,6 @@ export function ModelsGroup() {
             });
 
             sphere.position.y += 1.2;
-
             groupRef.current.add(ring);
             groupRef.current.add(sphere);
 
@@ -49,8 +49,11 @@ export function ModelsGroup() {
                 const globalScale = 1 / groupMaxAxis;
                 groupRef.current.scale.setScalar(globalScale);
             }
+
+            // ⭐️ Auto adjust camera!
+            fitCameraToObject(camera, groupRef.current);
         }
-    }, [ring, sphere]);
+    }, [ring, sphere, camera]);
 
     return <group ref={groupRef} />;
 }
