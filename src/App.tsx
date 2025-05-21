@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { ThemeProvider } from "./components/themeProvider"
 import Layout from './Layout'
-import CanvasView from './CanvasView'
+
+import { ThemeProvider } from "./components/themeProvider"
 
 function App() {
   return (

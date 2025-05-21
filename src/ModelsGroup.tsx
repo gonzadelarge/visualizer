@@ -42,6 +42,7 @@ export function SphereModel({ color }) {
     const ref = useRef<THREE.Object3D>(null);
     
     const { scene } = useGLTF('/models/sphere.glb');
+    
 
     useEffect(() => {
         if (scene) {
@@ -64,10 +65,18 @@ export function SphereModel({ color }) {
     
 
     useEffect(() => {
-        if (scene) {
-            scene.position.y += 2.8;
-        }
-    }, [scene])
+        const timer = setInterval(() => {
+            if (ref.current && scene) {
+                scene.position.y += 5.5;
+                clearInterval(timer);
+            }
+        }, 700);
+
+        return () => {
+            clearInterval(timer);
+        };  
+    }, [])
+    
     
 
     return (

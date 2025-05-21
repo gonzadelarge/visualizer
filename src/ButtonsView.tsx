@@ -9,11 +9,14 @@ type ButtonsViewProps = {
 const style: React.CSSProperties = {
     position: 'absolute',
     width: '100%',
-    left: 0,
+    left: '50%',
     bottom: 0,
     zIndex: 1,
-    padding: 30,
+    maxWidth: 720,
     display: 'flex',
+    margin: '0 auto',
+    padding: '36px 18px',
+    transform: 'translateX(-50%)',
     justifyContent: 'space-evenly',
 }
 
