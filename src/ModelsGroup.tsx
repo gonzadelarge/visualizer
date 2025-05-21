@@ -3,13 +3,14 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { OBJLoader } from 'three-stdlib';
+import { useGLTF } from "@react-three/drei";
 import { useLoader, useFrame } from '@react-three/fiber';
 
 
 export function Model() {
     const ref = useRef<THREE.Object3D>(null);
 
-    const object = useLoader(OBJLoader, '/models/ring.obj');
+    const { scene } = useGLTF('/models/ring.glb');
 
     useFrame((_state, delta) => {
         if (ref.current) {
@@ -18,8 +19,8 @@ export function Model() {
     });
 
     useEffect(() => {
-        if (object) {
-            object.traverse((child) => {
+        if (scene) {
+            scene.traverse((child) => {
                 if ((child as THREE.Mesh).isMesh) {
                     (child as THREE.Mesh).material = new THREE.MeshStandardMaterial({
                         color: new THREE.Color('#cccccc'),
@@ -30,36 +31,47 @@ export function Model() {
                 }
             });
         }
-    }, [object]);
+    }, [scene]);
 
     return (
-        <primitive ref={ref} object={object} />
+        <primitive ref={ref} object={scene} />
     );
 }
 
 export function SphereModel({ color }) {
     const ref = useRef<THREE.Object3D>(null);
-    const object = useLoader(OBJLoader, '/models/sphere.obj');
+    
+    const { scene } = useGLTF('/models/sphere.glb');
 
-    if (object) {
-        object.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-                (child as THREE.Mesh).material = new THREE.MeshPhysicalMaterial({
-                    color: new THREE.Color(color),
-                    clearcoatRoughness: 0.2,
-                    transmission: 0.8,
-                    transparent: true,
-                    roughness: 0.5,
-                    metalness: 0.1,
-                    thickness: 1.5,
-                    clearcoat: 1.0,
-                });
-            }
-        });
-    }
+    useEffect(() => {
+        if (scene) {
+            scene.traverse((child) => {
+                if ((child as THREE.Mesh).isMesh) {
+                    (child as THREE.Mesh).material = new THREE.MeshPhysicalMaterial({
+                        color: new THREE.Color(color),
+                        clearcoatRoughness: 0.2,
+                        transmission: 0.8,
+                        transparent: true,
+                        roughness: 0.5,
+                        metalness: 0.1,
+                        thickness: 1.5,
+                        clearcoat: 1.0,
+                    });
+                }
+            });
+        }
+    }, [color])
+    
+
+    useEffect(() => {
+        if (scene) {
+            scene.position.y += 2.8;
+        }
+    }, [scene])
+    
 
     return (
-        <primitive ref={ref} object={object} />
+        <primitive ref={ref} object={scene} />
     );
 }
 

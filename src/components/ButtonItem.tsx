@@ -1,26 +1,30 @@
 import React from 'react'
 
+import { colors } from '../lib/colors';
 import { Button } from "../components/ui/button"
+import { hexToHexWithAlpha } from '../lib/helpers';
 
 type ButtonItemProps = {
     text: string;
-    value: string;
     setColor: (color: string) => void;
 };
 
 
-const ButtonItem: React.FC<ButtonItemProps> = ({ value, setColor, text }) => {
+const ButtonItem: React.FC<ButtonItemProps> = ({ text, setColor }) => {
     const onClick = () => {
-        setColor(value);
+        setColor(colors[text]);
     }
 
     return (
         <Button
-            color={text}
-            onClick={onClick}
+            size="icon"
             variant="outline"
+            onClick={onClick}
+            style={{
+                borderColor: colors[text],
+                background: hexToHexWithAlpha(colors[text], 0.6),
+            }}
         >
-            {text}
         </Button>
     )
 }

@@ -20,3 +20,17 @@ export function fitCameraToObject(camera: Camera, object: THREE.Object3D, offset
 
     camera.lookAt(center);
 }
+
+export function hexToHexWithAlpha(hex: string, alpha: number): string {
+    alpha = Math.max(0, Math.min(1, alpha));
+  
+    hex = hex.replace('#', '');
+  
+    if (hex.length === 3) {
+      hex = hex.split('').map(char => char + char).join('');
+    }
+  
+    const alphaHex = Math.round(alpha * 255).toString(16).padStart(2, '0');
+  
+    return `#${hex}${alphaHex}`;
+  }

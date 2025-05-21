@@ -8,24 +8,25 @@ type ButtonsViewProps = {
 
 const style: React.CSSProperties = {
     position: 'absolute',
-    gap: 12,
-    top: 20,
-    left: 20,
+    width: '100%',
+    left: 0,
+    bottom: 0,
     zIndex: 1,
+    padding: 30,
     display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'space-evenly',
 }
 
 const ButtonsView: React.FC<ButtonsViewProps> = ({ setColor }) => {
 
     return (
         <div style={style}>
-            <ButtonItem value={'#cccccc'} setColor={setColor} text={"Gray"} />
-            <ButtonItem value={'#8A2BE2'} setColor={setColor} text={"Violet"} />
-            <ButtonItem value={'#156dd1'} setColor={setColor} text={"Blue"} />
-            <ButtonItem value={'#FFD700'} setColor={setColor} text={"Gold"} />
-            <ButtonItem value={'#00CED1'} setColor={setColor} text={"Cyan"} />
-            <ButtonItem value={'#d9761a'} setColor={setColor} text={"Orange"} />
+            <ButtonItem setColor={setColor} text={"gray"} />
+            <ButtonItem setColor={setColor} text={"violet"} />
+            <ButtonItem setColor={setColor} text={"blue"} />
+            <ButtonItem setColor={setColor} text={"gold"} />
+            <ButtonItem setColor={setColor} text={"cyan"} />
+            <ButtonItem setColor={setColor} text={"orange"} />
         </div>
     )
 }
