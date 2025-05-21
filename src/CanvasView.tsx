@@ -4,13 +4,18 @@ import { Canvas } from '@react-three/fiber'
 import { Html, OrbitControls, Environment } from '@react-three/drei';
 
 import { Model, SphereModel } from './ModelsGroup';
+import { Spinner } from './components/ui/spinner';
 
 type CanvasViewProps = {
     color: string;
 };
 
 function Loader() {
-    return <Html>Loading...</Html>;
+    return (
+        <Html center>
+          <Spinner size="medium" />
+        </Html>
+      );
 }
 
 const CanvasView: React.FC<CanvasViewProps> = ({ color }) => {
