@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ButtonItem from './components/ButtonItem'
+import { colors } from './lib/colors';
 
 type ButtonsViewProps = {
     setColor: (color: string) => void;
@@ -24,12 +25,11 @@ const ButtonsView: React.FC<ButtonsViewProps> = ({ setColor }) => {
 
     return (
         <div style={style}>
-            <ButtonItem setColor={setColor} text={"gray"} />
-            <ButtonItem setColor={setColor} text={"violet"} />
-            <ButtonItem setColor={setColor} text={"blue"} />
-            <ButtonItem setColor={setColor} text={"gold"} />
-            <ButtonItem setColor={setColor} text={"cyan"} />
-            <ButtonItem setColor={setColor} text={"orange"} />
+            {Object.keys(colors).map((key) => (<ButtonItem
+                key={key}
+                text={key}
+                setColor={setColor}
+            />))}
         </div>
     )
 }

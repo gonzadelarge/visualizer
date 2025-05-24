@@ -40,9 +40,9 @@ export function Model() {
 
 export function SphereModel({ color }) {
     const ref = useRef<THREE.Object3D>(null);
-    
+
     const { scene } = useGLTF('/models/sphere.glb');
-    
+
 
     useEffect(() => {
         if (scene) {
@@ -52,7 +52,7 @@ export function SphereModel({ color }) {
                         color: new THREE.Color(color),
                         clearcoatRoughness: 0.2,
                         transmission: 0.8,
-                        transparent: true,
+                        transparent: false,
                         roughness: 0.5,
                         metalness: 0.1,
                         thickness: 1.5,
@@ -62,7 +62,7 @@ export function SphereModel({ color }) {
             });
         }
     }, [color])
-    
+
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -74,10 +74,10 @@ export function SphereModel({ color }) {
 
         return () => {
             clearInterval(timer);
-        };  
+        };
     }, [])
-    
-    
+
+
 
     return (
         <primitive ref={ref} object={scene} />

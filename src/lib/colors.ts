@@ -1,16 +1,14 @@
 type Colors = {
-    gray: string;
-    violet: string;
-    blue: string;
+    red: string;
+    white: string;
     gold: string;
     cyan: string;
     orange: string;
 }
 
 export const colors: Colors = {
-    gray: '#cccccc',
-    violet: '#8A2BE2',
-    blue: '#156dd1',
+    white: '#f0f5f4',
+    red: '#e22b50',
     gold: '#FFD700',
     cyan: '#00CED1',
     orange: '#d9761a',
